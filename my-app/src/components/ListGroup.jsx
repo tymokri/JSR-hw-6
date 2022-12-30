@@ -1,30 +1,35 @@
 import React from "react";
 import cn from 'classnames';
+import * as PropTypes from "prop-types";
 
 class ListGroup extends React.Component {
     render() {
         const { children } = this.props;
+        const listGroupClass = cn('list-group');
+        const listGroupItemClass = cn('list-group-item');
 
-        const listGroupClass = cn(
-            {
-                'list-group': true
-            });
+        function* idNumbers() {
+            let x = 0;
+            while (true) {
+                yield ++x;
+            }
+        }
+        const idNumber = idNumbers();
 
-        const listGroupItemClass = cn(
-            {
-                'list-group-item': true
-            });
-
-        return (<ul className={listGroupClass}>
-            {React.Children.map(children, child => {
-                return (
-                    <React.Fragment key={1}>
-                        <li className={listGroupItemClass}>{child}</li>
-                    </React.Fragment>
-                )
-            })}
-        </ul>);
+        return (
+            <ul className={listGroupClass}>{
+                children.map(item => {
+                    return (
+                        <li className={listGroupItemClass} key={idNumber.next().value}>{item}</li>
+                    )
+                })
+            }</ul>
+        )
     }
+}
+
+ListGroup.propTypes = {
+    children: PropTypes.array.isRequired
 }
 
 export default ListGroup;
